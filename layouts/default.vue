@@ -1,8 +1,10 @@
 <template>
-  <div class="container mx-auto">
+  <ClientOnly>
     <TheNavbar />
-    <slot></slot>
-  </div>
+    <div class="container mx-auto mt-10 max-md:px-5">
+      <slot></slot>
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts"></script>
