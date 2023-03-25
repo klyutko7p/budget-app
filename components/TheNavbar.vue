@@ -18,10 +18,6 @@
         class="text-center font-bold mr-5 text-lg duration-300 hover:text-hover-color">
         Categories
       </NuxtLink>
-      <NuxtLink to="/payments" active-class="text-hover-color"
-        class="text-center font-bold mr-5 text-lg duration-300 hover:text-hover-color">
-        Payments
-      </NuxtLink>
       <NuxtLink to="/currency" active-class="text-hover-color"
         class="text-center font-bold text-lg duration-300 hover:text-hover-color">
         Currency

@@ -1,5 +1,6 @@
 <template>
-    <button class="button-23 bg-white text-[#222222] hover:bg-hover-color hover:text-white duration-200" role="button">
+    <button type="button" class="button-23 bg-white text-[#222222] hover:bg-hover-color hover:text-white duration-200"
+        role="button">
         <slot></slot>
     </button>
 </template>

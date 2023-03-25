@@ -12,7 +12,7 @@ export const useCategoriesStore = defineStore("categories", () => {
 
   async function addCategory(userCategory: Category) {
     try {
-      if (userCategory.title === "" || userCategory.icon === "") {
+      if (!userCategory.title && !userCategory.icon) {
         toast.error("Title/Icon cannot be empty");
         return false;
       } else {
@@ -30,7 +30,7 @@ export const useCategoriesStore = defineStore("categories", () => {
 
   async function editCategory(userCategory: Category) {
     try {
-      if (userCategory.title === "" || userCategory.icon === "") {
+      if (!userCategory.title && !userCategory.icon) {
         toast.error("Title/Icon cannot be empty");
         return false;
       } else {

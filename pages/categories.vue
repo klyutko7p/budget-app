@@ -1,18 +1,117 @@
+<script lang="ts" setup>
+import { useCategoriesStore } from '../stores/categories'
+import { useIconsStore } from '../stores/icons'
+
+const storeCategories = useCategoriesStore()
+const storeIcons = useIconsStore()
+
+let categories = ref<Array<Category>>([])
+let categoriesExpenses = ref<Array<Category>>([])
+let categoriesIncome = ref<Array<Category>>([])
+let isLoading = ref(true)
+let isExpensesCategories = ref(true)
+let isIncomeCategories = ref(false)
+let showModal = ref(false)
+let editId = ref(0)
+
+let userCategory = ref({
+    _id: '',
+    title: ''.trim(),
+    type: 'expenses',
+    background_color: '#6495ED',
+    icon: '',
+} as Category)
+
+
+function getCategory(category: Category) {
+    userCategory.value._id = category._id
+    userCategory.value.title = category.title
+    userCategory.value.background_color = category.background_color
+    userCategory.value.icon = category.icon
+    userCategory.value.type = category.type
+    editId.value = 1
+    showModal.value = true
+}
+
+async function addCategory() {
+    let flag = await storeCategories.addCategory(userCategory.value)
+    await storeCategories.fetchCategories()
+    categories.value = await storeCategories.getCategories.categories
+    filterCategories()
+    if (flag) {
+        closeModal()
+    }
+}
+
+async function editCategory() {
+    let flag = await storeCategories.editCategory(userCategory.value)
+    await storeCategories.fetchCategories()
+    categories.value = await storeCategories.getCategories.categories
+    filterCategories()
+    if (flag) {
+        closeModal()
+    }
+}
+
+async function deleteCategory() {
+    let flag = await storeCategories.deleteCategory(userCategory.value)
+    await storeCategories.fetchCategories()
+    categories.value = await storeCategories.getCategories.categories
+    filterCategories()
+    if (flag) {
+        closeModal()
+    }
+}
+
+function closeModal() {
+    showModal.value = false
+    clearUserCategory()
+    editId.value = 0
+}
+
+function clearUserCategory() {
+    userCategory.value = {
+        _id: '',
+        title: ''.trim(),
+        type: 'expenses',
+        background_color: '#6495ED',
+        icon: '',
+    }
+}
+
+function filterCategories() {
+    categoriesExpenses.value = categories.value.filter((category) => category.type === "expenses")
+    categoriesIncome.value = categories.value.filter((category) => category.type === "income")
+}
+
+function toggleTypeCategory() {
+    isExpensesCategories.value = !isExpensesCategories.value
+    isIncomeCategories.value = !isIncomeCategories.value
+}
+
+onMounted(async () => {
+    await storeCategories.fetchCategories()
+    categories.value = await storeCategories.getCategories.categories
+    filterCategories()
+    isLoading.value = false
+})
+
+</script>
+
 <template>
     <Head>
         <Title>
             OBA - Categories
         </Title>
     </Head>
-
     <div v-if="!isLoading">
         <div class="flex items-center justify-evenly text-2xl">
             <h1 class="text-2xl font-bold hover:text-hover-color duration-300 uppercase cursor-pointer"
-                @click="toggleType()" :class="{ 'text-hover-color underline': isExpensesCategories }">
+                @click="toggleTypeCategory()" :class="{ 'text-hover-color underline': isExpensesCategories }">
                 Expenses
             </h1>
             <h1 class="text-2xl font-bold hover:text-hover-color duration-300 uppercase cursor-pointer"
-                @click="toggleType()" :class="{ 'text-hover-color underline': isIncomeCategories }">
+                @click="toggleTypeCategory()" :class="{ 'text-hover-color underline': isIncomeCategories }">
                 Income
             </h1>
         </div>
@@ -20,16 +119,14 @@
             <CategoryList @editCategory="getCategory" :categories="categoriesExpenses" v-if="isExpensesCategories" />
             <CategoryList @editCategory="getCategory" :categories="categoriesIncome" v-if="isIncomeCategories" />
         </div>
-        <div class="max-w-96 mb-5 w-1/4 max-md:w-1/2 hover:bg-hover-color hover:text-white rounded-3xl p-5 mx-auto cursor-pointer text-center mt-24 text-2xl duration-300"
-            @click="showModal = true">
-            <Icon name="material-symbols:heart-plus" size="4em" />
-            <h1 class="font-bold">Create a new Category</h1>
+        <div class="text-center">
+            <UIAddButton data-aos="fade-up" @click="showModal = true" />
         </div>
     </div>
     <div v-else>
         <UISpinner />
     </div>
-    <UIModal :show="showModal" @close="showModal = false" @click.self="close()">
+    <UIModal :show="showModal" @close="closeModal()" @click.self="closeModal()">
         <template #header v-if="!editId">
             <h1>Create a new Category</h1>
         </template>
@@ -72,7 +169,7 @@
                 <UIMainButton @click="addCategory()">
                     Add
                 </UIMainButton>
-                <UIMainButton @click="close()">
+                <UIMainButton @click="closeModal()">
                     Close
                 </UIMainButton>
             </div>
@@ -122,7 +219,7 @@
                 <UIMainButton @click="deleteCategory()">
                     Delete
                 </UIMainButton>
-                <UIMainButton @click="close()">
+                <UIMainButton @click="closeModal()">
                     Close
                 </UIMainButton>
             </div>
@@ -130,107 +227,3 @@
     </UIModal>
 </template>
 
-<script lang="ts" setup>
-import { useCategoriesStore } from '../stores/categories'
-import { useIconsStore } from '../stores/icons'
-const storeCategories = useCategoriesStore()
-const storeIcons = useIconsStore()
-
-let categories = ref<Array<Category>>([])
-let categoriesExpenses = ref<Array<Category>>([])
-let categoriesIncome = ref<Array<Category>>([])
-let isLoading = ref(true)
-let isExpensesCategories = ref(true)
-let isIncomeCategories = ref(false)
-let showModal = ref(false)
-let editId = ref(0)
-
-let userCategory = ref({
-    _id: '',
-    title: ''.trim(),
-    type: 'expenses',
-    background_color: '#6495ED',
-    icon: '',
-})
-
-
-function getCategory(category: Category) {
-    userCategory.value = category
-    editId.value = 1
-    showModal.value = true
-}
-
-async function editCategory() {
-    let flag = await storeCategories.editCategory(userCategory.value)
-    await storeCategories.fetchCategories()
-    categories.value = await storeCategories.getCategories.categories
-    filterCategories()
-
-    if (flag) {
-        close()
-    } else {
-        return
-    }
-}
-
-async function deleteCategory() {
-    let flag = await storeCategories.deleteCategory(userCategory.value)
-    await storeCategories.fetchCategories()
-    categories.value = await storeCategories.getCategories.categories
-    filterCategories()
-
-    if (flag) {
-        close()
-    } else {
-        return
-    }
-}
-
-
-async function addCategory() {
-    let flag = await storeCategories.addCategory(userCategory.value)
-    await storeCategories.fetchCategories()
-    categories.value = await storeCategories.getCategories.categories
-    filterCategories()
-
-    if (flag) {
-        close()
-    } else {
-        return
-    }
-}
-
-function close() {
-    showModal.value = false
-    clearUserCategory()
-    editId.value = 0
-}
-
-function clearUserCategory() {
-    userCategory.value = {
-        _id: '',
-        title: ''.trim(),
-        type: 'expenses',
-        background_color: '#6495ED',
-        icon: '',
-    }
-}
-
-function filterCategories() {
-    categoriesExpenses.value = categories.value.filter((category) => category.type === "expenses")
-    categoriesIncome.value = categories.value.filter((category) => category.type === "income")
-}
-
-function toggleType() {
-    isExpensesCategories.value = !isExpensesCategories.value
-    isIncomeCategories.value = !isIncomeCategories.value
-}
-
-onMounted(async () => {
-    await storeCategories.fetchCategories()
-    categories.value = await storeCategories.getCategories.categories
-    filterCategories()
-    isLoading.value = false
-})
-
-</script>

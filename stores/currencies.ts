@@ -5,7 +5,7 @@ const toast = useToast();
 
 export const useCurrenciesStore = defineStore("currencies", () => {
   let currencies = ref();
-  let currencyCustomer = ref("-");
+  let currencyCustomer = ref("USD");
 
   async function fetchCurrencies() {
     let { data: result } = await useFetch("/api/currencies");
@@ -14,7 +14,7 @@ export const useCurrenciesStore = defineStore("currencies", () => {
 
   function updateCurrencyCustomer(currency: string) {
     currencyCustomer.value = currency;
-    toast.success(`You pick ${currency}`, { position: "bottom-right" });
+    toast.success(`You pick ${currency}`);
   }
 
   const getCurrencies = computed(() => currencies.value);
