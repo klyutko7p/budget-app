@@ -71,7 +71,6 @@ onMounted(() => {
     accounts.value = storeAccounts.getAccounts
     currentCurrency.value = storeCurrencies.getCurrencyCustomer
 })
-
 </script>
 
 <template>
@@ -187,5 +186,3 @@ onMounted(() => {
         </template>
     </UIModal>
 </template>
-
-<style scoped></style>

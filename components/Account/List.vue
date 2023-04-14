@@ -1,8 +1,6 @@
 <template>
-    <div v-for="account in accounts"
-        class="flex items-center justify-between bg-secondary-color p-5 rounded-2xl cursor-pointer hover:bg-hover-color duration-300"
-        data-aos="fade-up" @click="editAccount(account)">
-        <AccountItem :account="account" />
+    <div v-for="account in accounts" data-aos="fade-up">
+        <AccountItem :account="account" @edit-account="editAccount(account)" />
     </div>
 </template>
 

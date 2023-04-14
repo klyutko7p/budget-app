@@ -1,10 +1,34 @@
+<script lang="ts" setup>
+import { useCurrenciesStore } from '../stores/currencies'
+const storeCurrencies = useCurrenciesStore()
+
+let currencies = ref<Array<Currency>>([])
+let isLoading = ref(true)
+let query = ref("")
+
+function searchCurrencies() {
+    let fetchCurrencies = storeCurrencies.getCurrencies.currencies
+    if (!query.value) {
+        currencies.value = fetchCurrencies
+    } else {
+        currencies.value = fetchCurrencies.filter((currency: Currency) => currency.title.toLowerCase().includes(query.value.trim().toLowerCase()))
+    }
+}
+
+onMounted(async () => {
+    await storeCurrencies.fetchCurrencies()
+    currencies.value = await storeCurrencies.getCurrencies.currencies
+    isLoading.value = false
+})
+</script>
+
 <template>
     <Head>
         <Title>
             OBA - Currency
         </Title>
     </Head>
-    
+
     <div v-if="!isLoading">
         <div class="flex mb-5 items-center justify-between max-md:flex-col">
             <h1 class="text-3xl font-bold">Your currency is: <span class="text-hover-color">{{
@@ -31,28 +55,3 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-import { useCurrenciesStore } from '../stores/currencies'
-const storeCurrencies = useCurrenciesStore()
-
-let currencies = ref<Array<Currency>>([])
-let isLoading = ref(true)
-let query = ref("")
-
-function searchCurrencies() {
-    let fetchCurrencies = storeCurrencies.getCurrencies.currencies
-    if (!query.value) {
-        currencies.value = fetchCurrencies
-    } else {
-        currencies.value = fetchCurrencies.filter((currency: Currency) => currency.title.toLowerCase().includes(query.value.trim().toLowerCase()))
-    }
-}
-
-onMounted(async () => {
-    await storeCurrencies.fetchCurrencies()
-    currencies.value = await storeCurrencies.getCurrencies.currencies
-    isLoading.value = false
-})
-
-
-</script>

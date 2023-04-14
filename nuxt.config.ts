@@ -8,6 +8,8 @@ export default defineNuxtConfig({
     plugins: ["~/server/index.ts"],
   },
 
+  plugins: [{ src: "~/plugins/apexchart.ts", mode: "client" }],
+
   runtimeConfig: {
     mongodbUrl: process.env.MONGODB_URL,
   },

@@ -95,7 +95,6 @@ onMounted(async () => {
     filterCategories()
     isLoading.value = false
 })
-
 </script>
 
 <template>
