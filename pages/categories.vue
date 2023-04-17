@@ -104,7 +104,7 @@ onMounted(async () => {
         </Title>
     </Head>
     <div v-if="!isLoading">
-        <div class="flex items-center justify-evenly text-2xl">
+        <div class="flex items-center justify-evenly max-sm:text-center max-sm:block space-y-3 text-2xl">
             <h1 class="text-2xl font-bold hover:text-hover-color duration-300 uppercase cursor-pointer"
                 @click="toggleTypeCategory()" :class="{ 'text-hover-color underline': isExpensesCategories }">
                 Expenses
@@ -115,8 +115,8 @@ onMounted(async () => {
             </h1>
         </div>
         <div class="flex items-center justify-center gap-20 flex-wrap mt-10">
-            <CategoryList @editCategory="getCategory" :categories="categoriesExpenses" v-if="isExpensesCategories" />
-            <CategoryList @editCategory="getCategory" :categories="categoriesIncome" v-if="isIncomeCategories" />
+            <CategoryList @getCategory="getCategory" :categories="categoriesExpenses" v-if="isExpensesCategories" />
+            <CategoryList @getCategory="getCategory" :categories="categoriesIncome" v-if="isIncomeCategories" />
         </div>
         <div class="text-center">
             <UIAddButton data-aos="fade-up" @click="showModal = true" />

@@ -98,7 +98,7 @@ onMounted(() => {
             <div class="space-y-5">
                 <div class="flex items-center justify-center">
                     <input
-                        class="text-xl w-1/4 text-center appearance-none bg-secondary-color rounded py-2 px-4 focus:border-0"
+                        class="text-xl w-1/2 text-center appearance-none bg-secondary-color rounded py-2 px-4 focus:border-0"
                         v-model="userAccount.amount" type="number" placeholder="0">
                     <h1 class="ml-5 text-xl">{{ currentCurrency }}</h1>
                 </div>
@@ -143,7 +143,7 @@ onMounted(() => {
             <div class="space-y-5">
                 <div class="flex items-center justify-center">
                     <input
-                        class="text-xl w-1/4 text-center appearance-none bg-secondary-color rounded py-2 px-4 focus:border-0"
+                        class="text-xl w-1/2 text-center appearance-none bg-secondary-color rounded py-2 px-4 focus:border-0"
                         v-model="userAccount.amount" type="text" placeholder="0">
                     <h1 class="ml-5 text-xl">{{ currentCurrency }}</h1>
                 </div>

@@ -62,9 +62,21 @@ export const useAccountsStore = defineStore("accounts", () => {
     }
   }
 
+  function updateAccounts(operation: Operation) {
+    accounts.value.forEach((element) => {
+      if (
+        element.id === operation.account.id &&
+        operation.type === "expenses"
+      ) {
+        element.amount -= operation.amount;
+      } else {
+        element.amount += operation.amount;
+      }
+    });
+  }
+
   function updateAccountCustomer(account: Account) {
     accountCustomer.value = account;
-    console.log(accountCustomer);
   }
 
   const getFullSum = computed(() =>
@@ -81,5 +93,6 @@ export const useAccountsStore = defineStore("accounts", () => {
     editAccount,
     deleteAccount,
     updateAccountCustomer,
+    updateAccounts,
   };
 });
