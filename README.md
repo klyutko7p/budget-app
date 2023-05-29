@@ -1,5 +1,6 @@
-Setup with Tailwind CSS, SCSS, Pinia, Nuxt-Icon, Mongoose 
+Budget App
 
+![image](https://github.com/klyutko7p/budget-app/assets/95645570/a00c76eb-2295-4d6a-9718-e5a3b10855be)
 
 ## Setup
 
